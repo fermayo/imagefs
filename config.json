@@ -1,0 +1,27 @@
+{
+  "description": "ImageFS plugin for Docker",
+  "documentation": "https://docs.docker.com/engine/extend/plugins/",
+  "entrypoint": [
+    "/build/docker-volume-imagefs"
+  ],
+  "interface": {
+    "types": [
+      "docker.volumedriver/1.0"
+    ],
+    "socket": "imagefs.sock"
+  },
+  "mounts": [
+    {
+      "destination": "/var/run",
+      "source": "/var/run",
+      "type": "bind",
+      "options": ["bind"]
+    },
+    {
+      "destination": "/var/lib/docker/overlay2",
+      "source": "/var/lib/docker/overlay2",
+      "type": "bind",
+      "options": ["bind", "ro"]
+    }
+  ]
+}

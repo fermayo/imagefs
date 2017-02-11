@@ -43,6 +43,7 @@ You can mount any image on your container:
 
 ## Limitations
 
-It does not use any union FS driver, so:
+* Does not pull layers that are not present locally in the node
 * Only mounts one layer at a time (does not mount parent layers)
-* Allows write directly to the image, corrupting it (does not have a write layer on top)
+* Does not prevent writes to the image (does not have a write layer on top)
+* Only supports overlay2 graphdriver

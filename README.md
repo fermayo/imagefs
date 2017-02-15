@@ -23,7 +23,7 @@ docker service create --name ping --replicas 1 --restart-condition none --mount 
 * `target` is the directory in the service where the image will be mounted
 * `volume-opt=target` is the tag to give to the new volume snapshot
   Note that if the tag contains a registry URL the image will be pushed
-  when the volume is unmounted (Not yet implemented)
+  when the volume is unmounted
 
 Modify the volume from within the service
 

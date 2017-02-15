@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"strings"
@@ -26,8 +27,20 @@ func (d ImagefsDriver) Create(r volume.Request) volume.Response {
 	if !ok {
 		return volume.Response{Err: "no source volume specified"}
 	}
+
+	// pull the image
+	readCloser, err := d.cli.ImagePull(context.Background(), source, types.ImagePullOptions{
+		// HACK assume the registry ignores the auth header
+		RegistryAuth: "null",
+	})
+	if err != nil {
+		return volume.Response{Err: fmt.Sprintf("unexpected error: %s", err)}
+	}
+	scanner := bufio.NewScanner(readCloser)
+	for scanner.Scan() {
+	}
+
 	containerConfig := &container.Config{
-		// TODO pull image first
 		Image:      source,
 		Entrypoint: []string{"/runtime/loop"},
 		Labels: map[string]string{
@@ -129,7 +142,17 @@ func (d ImagefsDriver) Remove(r volume.Request) volume.Response {
 		}
 		parts := strings.Split(target, "/")
 		if len(parts) == 3 {
-			// TODO push
+			// push the image
+			readCloser, err := d.cli.ImagePush(context.Background(), target, types.ImagePushOptions{
+				// HACK assume the registry ignores the auth header
+				RegistryAuth: "null",
+			})
+			if err != nil {
+				return volume.Response{Err: fmt.Sprintf("unexpected error: %s", err)}
+			}
+			scanner := bufio.NewScanner(readCloser)
+			for scanner.Scan() {
+			}
 		}
 	}
 	err = d.cli.ContainerRemove(context.Background(), r.Name, types.ContainerRemoveOptions{

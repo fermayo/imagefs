@@ -2,7 +2,7 @@
   "description": "ImageFS plugin for Docker",
   "documentation": "https://docs.docker.com/engine/extend/plugins/",
   "entrypoint": [
-    "/build/docker-volume-imagefs"
+    "/docker-volume-imagefs"
   ],
   "interface": {
     "types": [
@@ -18,10 +18,10 @@
       "options": ["bind"]
     },
     {
-      "destination": "/var/lib/docker/overlay2",
-      "source": "/var/lib/docker/overlay2",
+      "destination": "/tmp",
+      "source": "/tmp",
       "type": "bind",
-      "options": ["bind", "ro"]
+      "options": ["bind"]
     }
   ]
 }

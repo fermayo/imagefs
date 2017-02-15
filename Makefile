@@ -1,5 +1,6 @@
-BUILD_DIR=rootfs/build
+BUILD_DIR=rootfs
 BINARY=$(BUILD_DIR)/docker-volume-imagefs
+LOOP_BINARY=$(BUILD_DIR)/loop
 REPONAME=fermayo/imagefs
 
 test:
@@ -8,7 +9,7 @@ test:
 binary: $(BINARY)
 
 $(BINARY):
-	docker run --rm -v $(CURDIR):/go/src/app -w /go/src/app golang:1.7 sh -c "go get -v && CGO_ENABLED=0 GOOS=linux go build -ldflags '-s' -a -installsuffix cgo -v -o $(BINARY)"
+	docker run --rm -v $(CURDIR):/go/src/app -w /go/src/app golang:1.7 sh -c "CGO_ENABLED=0 GOOS=linux go build -ldflags '-s' -a -installsuffix cgo -o $(BINARY); go build -o $(LOOP_BINARY) cmd/loop.go"
 
 clean:
 	rm -fr $(BUILD_DIR)
